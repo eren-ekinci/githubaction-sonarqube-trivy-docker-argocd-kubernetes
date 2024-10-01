@@ -21,7 +21,7 @@ env:
 jobs:
   file_scan:
     name: trivy-file-scan
-    runs-on: builder
+    runs-on: self-hosted
     steps:
       - name: check repository
         uses: actions/checkout@v4
@@ -57,7 +57,7 @@ jobs:
   
   docker_build_and_push:
     name: docker-build-push
-    runs-on: builder
+    runs-on: self-hosted
     needs: ['sonarqube_scan']
     steps:
       - name: check repository
@@ -78,7 +78,7 @@ jobs:
   
   image_scane:
     name: trivy-docker-image-scan
-    runs-on: builder
+    runs-on: self-hosted
     needs: ['docker_build_and_push','file_scan']
     steps:
       - name: Run Trivy vulnerability scanner
@@ -93,7 +93,7 @@ jobs:
   
   manifest_update:
     name: argocd-kubernetes-deployment
-    runs-on: builder
+    runs-on: self-hosted
     needs: ['docker_build_and_push','file_scan','image_scane']
     steps: 
       - name: check repository
